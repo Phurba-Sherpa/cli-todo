@@ -11,7 +11,11 @@ import (
 )
 
 func createTodo(cmd *cobra.Command, args []string) {
-	items := []todo.Item{}
+	items, err := todo.ReadItems("tridos.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	for _, arg := range args {
 		item := todo.Item{
 			Text: arg,
