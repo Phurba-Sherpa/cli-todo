@@ -5,12 +5,21 @@ package cmd
 
 import (
 	"fmt"
+	"log"
 
+	"github.com/phurba-sherpa/tri/todo"
 	"github.com/spf13/cobra"
 )
 
 func listTodo(cmd *cobra.Command, args []string) {
-	fmt.Println("list called")
+	item, err := todo.ReadItems("tridos.json")
+
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	fmt.Printf("%+v", item)
 }
 
 // listCmd represents the list command
