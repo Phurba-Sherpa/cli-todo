@@ -21,3 +21,17 @@ func SaveItem(fileName string, items []Item) error {
 
 	return nil
 }
+
+func ReadItems(fileName string) ([]Item, error) {
+	b, err := os.ReadFile(fileName)
+
+	if err != nil {
+		return []Item{}, err
+	}
+
+	var items []Item
+	if err := json.Unmarshal(b, &items); err != nil {
+		return []Item{}, err
+	}
+	return items, nil
+}
