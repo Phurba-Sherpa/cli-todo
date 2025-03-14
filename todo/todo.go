@@ -26,7 +26,7 @@ func ReadItems(fileName string) ([]Item, error) {
 	b, err := os.ReadFile(fileName)
 
 	if err != nil {
-		return []Item{}, err
+		return []Item{}, nil
 	}
 
 	var items []Item
