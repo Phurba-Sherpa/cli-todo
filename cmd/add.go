@@ -11,7 +11,7 @@ import (
 )
 
 func createTodo(cmd *cobra.Command, args []string) {
-	items, err := todo.ReadItems("tridos.json")
+	items, err := todo.ReadItems(dataFile)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -23,7 +23,7 @@ func createTodo(cmd *cobra.Command, args []string) {
 		items = append(items, item)
 	}
 
-	if err := todo.SaveItem("tridos.json", items); err != nil {
+	if err := todo.SaveItem(dataFile, items); err != nil {
 		log.Fatal(err)
 	}
 }
@@ -37,14 +37,4 @@ var addCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(addCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// addCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// addCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

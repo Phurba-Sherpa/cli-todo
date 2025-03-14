@@ -1,16 +1,14 @@
 /*
 Copyright © 2025 phurba
-
 */
 package cmd
 
 import (
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
 )
-
-
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -29,6 +27,8 @@ to quickly create a Cobra application.`,
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
+var dataFile string
+
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
@@ -37,15 +37,13 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
+	home, err := os.UserHomeDir()
 
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.tri.yaml)")
+	if err != nil {
+		log.Panicln("Unable to detect the home director. Please set the data file using --dataFile")
+	}
 
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	defaultPath := home + string(os.PathSeparator) + "personal" + string(os.PathSeparator) + "tri" + string(os.PathSeparator) + ".tridos.json"
+
+	rootCmd.PersistentFlags().StringVar(&dataFile, "datafile", defaultPath, "Data file to store todos")
 }
-
-

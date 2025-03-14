@@ -12,9 +12,10 @@ import (
 )
 
 func listTodo(cmd *cobra.Command, args []string) {
-	item, err := todo.ReadItems("tridos.json")
+	item, err := todo.ReadItems(dataFile)
 
 	if err != nil {
+		fmt.Printf("file path: %s\n", dataFile)
 		log.Fatal(err)
 		return
 	}
