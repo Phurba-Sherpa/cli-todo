@@ -6,13 +6,16 @@ package cmd
 import (
 	"fmt"
 	"log"
+	"os"
+	"strconv"
+	"text/tabwriter"
 
 	"github.com/phurba-sherpa/tri/todo"
 	"github.com/spf13/cobra"
 )
 
 func listTodo(cmd *cobra.Command, args []string) {
-	item, err := todo.ReadItems(dataFile)
+	items, err := todo.ReadItems(dataFile)
 
 	if err != nil {
 		fmt.Printf("file path: %s\n", dataFile)
@@ -20,7 +23,12 @@ func listTodo(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	fmt.Printf("%+v", item)
+	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', tabwriter.TabIndent|tabwriter.Debug)
+	fmt.Fprintln(w, "Name\tPriority\t")
+	for _, item := range items {
+		fmt.Fprintln(w, strconv.Itoa(item.Priority)+"\t"+item.Text+"\t")
+	}
+	w.Flush()
 }
 
 // listCmd represents the list command
