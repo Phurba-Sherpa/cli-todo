@@ -6,7 +6,21 @@ import (
 )
 
 type Item struct {
-	Text string
+	Text     string
+	Priority int
+}
+
+func (i *Item) SetPriority(pri int) {
+	switch pri {
+	case 1:
+		i.Priority = 1
+	case 3:
+		i.Priority = 3
+		break
+	default:
+		i.Priority = 2
+
+	}
 }
 
 func SaveItem(fileName string, items []Item) error {
