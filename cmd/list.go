@@ -19,10 +19,6 @@ var (
 	allOpt  bool
 )
 
-func display(w *tabwriter.Writer, item todo.Item) {
-	fmt.Fprintln(w, item.Label()+"\t"+item.PrettyP()+"\t"+item.Text+"\t"+item.PrettyD()+"\t")
-}
-
 func listTodo(cmd *cobra.Command, args []string) {
 	items, err := todo.ReadItems(dataFile)
 
@@ -36,12 +32,8 @@ func listTodo(cmd *cobra.Command, args []string) {
 	w := tabwriter.NewWriter(os.Stdout, 3, 0, 2, ' ', 0)
 	fmt.Fprintln(w, "SNo\tPriority\tName\tStatus\t")
 	for _, item := range items {
-		if allOpt {
-			display(w, item)
-			continue
-		}
-		if item.Done == doneOpt {
-			display(w, item)
+		if allOpt || (item.Done == doneOpt) {
+			fmt.Fprintln(w, item.Label()+"\t"+item.PrettyP()+"\t"+item.Text+"\t"+item.PrettyD()+"\t")
 		}
 	}
 	w.Flush()
@@ -58,5 +50,5 @@ var listCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(listCmd)
 	listCmd.Flags().BoolVar(&doneOpt, "done", false, "Show 'done' todos")
-	listCmd.Flags().BoolVar(&allOpt, "all", false, "Show 'all' todos")
+	listCmd.Flags().BoolVar(&allOpt, "all", false, "Show all todos")
 }
