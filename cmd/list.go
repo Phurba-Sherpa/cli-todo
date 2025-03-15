@@ -14,6 +14,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	doneOpt bool
+)
+
 func listTodo(cmd *cobra.Command, args []string) {
 	items, err := todo.ReadItems(dataFile)
 
@@ -27,7 +31,9 @@ func listTodo(cmd *cobra.Command, args []string) {
 	w := tabwriter.NewWriter(os.Stdout, 3, 0, 2, ' ', 0)
 	fmt.Fprintln(w, "SNo\tPriority\tName\tStatus\t")
 	for _, item := range items {
-		fmt.Fprintln(w, item.Label()+"\t"+item.PrettyP()+"\t"+item.Text+"\t"+item.PrettyD()+"\t")
+		if item.Done == doneOpt {
+			fmt.Fprintln(w, item.Label()+"\t"+item.PrettyP()+"\t"+item.Text+"\t"+item.PrettyD()+"\t")
+		}
 	}
 	w.Flush()
 }
@@ -42,4 +48,5 @@ var listCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+	listCmd.Flags().BoolVar(&doneOpt, "done", false, "Show 'done' todos")
 }
