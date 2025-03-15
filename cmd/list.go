@@ -24,10 +24,10 @@ func listTodo(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
-	fmt.Fprintln(w, "SNo\tName\tPriority\t")
+	w := tabwriter.NewWriter(os.Stdout, 3, 0, 2, ' ', 0)
+	fmt.Fprintln(w, "SNo\tPriority\tName\tStatus\t")
 	for _, item := range items {
-		fmt.Fprintln(w, item.Label()+"\t"+item.PrettyP()+"\t"+item.Text+"\t")
+		fmt.Fprintln(w, item.Label()+"\t"+item.PrettyP()+"\t"+item.Text+"\t"+item.PrettyD()+"\t")
 	}
 	w.Flush()
 }

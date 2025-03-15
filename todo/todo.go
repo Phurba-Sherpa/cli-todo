@@ -39,6 +39,13 @@ func (i *Item) SetPriority(pri int) {
 	}
 }
 
+func (i *Item) PrettyD() string {
+	if i.Done {
+		return "✓"
+	}
+	return ""
+}
+
 func (i *Item) PrettyP() string {
 	if i.Priority == 1 {
 		return "(1)"
