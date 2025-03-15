@@ -5,17 +5,40 @@ This is an awesome CLI app in Go Lang.
 package cmd
 
 import (
+	"fmt"
+	"log"
+	"sort"
+	"strconv"
+
+	"github.com/phurba-sherpa/tri/todo"
 	"github.com/spf13/cobra"
 )
 
 // doneCmd represents the done command
-func done(cmd *cobra.Command, args []string) {}
+func doneRun(cmd *cobra.Command, args []string) {
+	items, err := todo.ReadItems(dataFile)
+	i, err := strconv.Atoi(args[0])
+
+	if err != nil {
+		log.Fatalln(args[0], "is not valid label\n", err)
+	}
+
+	if i > 0 && i < len(items) {
+		items[i-1].Done = true
+		fmt.Printf("%q %v", items[i-1].Text, items[i-1].Done)
+		sort.Sort(todo.ByPri(items))
+		todo.SaveItem(dataFile, items)
+	} else {
+		log.Println(i, "Doesn't match any item")
+	}
+
+}
 
 var doneCmd = &cobra.Command{
-	Use:   "done",
-	Short: "A brief description of your command",
-	Long:  "",
-	Run:   done,
+	Use:     "done",
+	Aliases: []string{"do"},
+	Short:   "Mark Item as Done",
+	Run:     doneRun,
 }
 
 func init() {
