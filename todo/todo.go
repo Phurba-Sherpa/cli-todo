@@ -12,6 +12,8 @@ type Item struct {
 	position int
 }
 
+// ByPri implements sort.Sort (convention By<name>)
+// Need to implement 3 func Len, Swap, Less
 type ByPri []Item
 
 func (s ByPri) Len() int      { return len(s) }

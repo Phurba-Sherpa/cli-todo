@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"text/tabwriter"
 
 	"github.com/phurba-sherpa/tri/todo"
@@ -16,6 +17,7 @@ import (
 func listTodo(cmd *cobra.Command, args []string) {
 	items, err := todo.ReadItems(dataFile)
 
+	sort.Sort(todo.ByPri(items))
 	if err != nil {
 		fmt.Printf("file path: %s\n", dataFile)
 		log.Fatal(err)
