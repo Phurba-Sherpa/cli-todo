@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"text/tabwriter"
 
 	"github.com/phurba-sherpa/tri/todo"
@@ -23,10 +22,10 @@ func listTodo(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', tabwriter.TabIndent|tabwriter.Debug)
-	fmt.Fprintln(w, "Name\tPriority\t")
+	w := tabwriter.NewWriter(os.Stdout, 3, 0, 1, ' ', 0)
+	fmt.Fprintln(w, "SNo\tName\tPriority\t")
 	for _, item := range items {
-		fmt.Fprintln(w, strconv.Itoa(item.Priority)+"\t"+item.Text+"\t")
+		fmt.Fprintln(w, item.Label()+"\t"+item.PrettyP()+"\t"+item.Text+"\t")
 	}
 	w.Flush()
 }
