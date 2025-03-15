@@ -2,7 +2,9 @@ package todo
 
 import (
 	"encoding/json"
+	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -19,7 +21,6 @@ type ByPri []Item
 
 func (s ByPri) Len() int      { return len(s) }
 func (s ByPri) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
-
 func (s ByPri) Less(i, j int) bool {
 	item1 := s[i]
 	item2 := s[j]
@@ -39,6 +40,7 @@ func (s ByPri) Less(i, j int) bool {
 
 }
 
+// ** Opt
 func (i *Item) SetPriority(pri int) {
 	switch pri {
 	case 1:
@@ -89,10 +91,27 @@ func SaveItem(fileName string, items []Item) error {
 }
 
 func ReadItems(fileName string) ([]Item, error) {
+
+	// Check if dir exist if not create one
+	dir := filepath.Dir(fileName)
+	if err := os.MkdirAll(dir, 0644); err != nil {
+		log.Fatalln(dir, "Error creating dir\n", err)
+	}
+
+	// Try reading file
 	b, err := os.ReadFile(fileName)
 
 	if err != nil {
-		return []Item{}, nil
+		// If file not found initialize with []
+		if os.IsNotExist(err) {
+			if err := SaveItem(fileName, []Item{}); err != nil {
+				log.Fatalln(fileName, "Error creating file", err)
+			}
+			return []Item{}, nil
+		} else {
+			log.Fatalln(fileName, "Error reading content \n", err)
+		}
+		return nil, err
 	}
 
 	var items []Item
@@ -100,7 +119,7 @@ func ReadItems(fileName string) ([]Item, error) {
 		return []Item{}, err
 	}
 
-	for i, _ := range items {
+	for i := range items {
 		items[i].position = i + 1
 	}
 

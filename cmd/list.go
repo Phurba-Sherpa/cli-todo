@@ -21,22 +21,26 @@ var (
 
 func listTodo(cmd *cobra.Command, args []string) {
 	items, err := todo.ReadItems(dataFile)
+	if err != nil {
+		log.Fatalf(dataFile, "Error reading content", err)
+	}
 
 	sort.Sort(todo.ByPri(items))
-	if err != nil {
-		fmt.Printf("file path: %s\n", dataFile)
-		log.Fatal(err)
-		return
-	}
 
 	w := tabwriter.NewWriter(os.Stdout, 3, 0, 2, ' ', 0)
-	fmt.Fprintln(w, "SNo\tPriority\tName\tStatus\t")
-	for _, item := range items {
-		if allOpt || (item.Done == doneOpt) {
-			fmt.Fprintln(w, item.Label()+"\t"+item.PrettyP()+"\t"+item.Text+"\t"+item.PrettyD()+"\t")
+	defer w.Flush()
+
+	// ** if items display record
+	if len(items) > 0 {
+		fmt.Fprintln(w, "SNo\tPriority\tName\tStatus\t")
+		for _, item := range items {
+			if allOpt || (item.Done == doneOpt) {
+				fmt.Fprintln(w, item.Label()+"\t"+item.PrettyP()+"\t"+item.Text+"\t"+item.PrettyD()+"\t")
+			}
 		}
+	} else {
+		fmt.Println("No todos to display")
 	}
-	w.Flush()
 }
 
 // listCmd represents the list command
