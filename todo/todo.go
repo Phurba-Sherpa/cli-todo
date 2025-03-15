@@ -19,11 +19,24 @@ type ByPri []Item
 
 func (s ByPri) Len() int      { return len(s) }
 func (s ByPri) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
+
 func (s ByPri) Less(i, j int) bool {
-	if s[i].Priority == s[j].Priority {
-		return s[i].position < s[j].position
+	item1 := s[i]
+	item2 := s[j]
+
+	// ** first prio done
+	if item1.Done != item2.Done {
+		return item1.Done
 	}
-	return s[i].Priority < s[j].Priority
+
+	// ** second prio 'prio'
+	if item1.Priority != item2.Priority {
+		return item1.Priority < item2.Priority
+	}
+
+	// ** last prio: "index"
+	return item1.position < item2.position
+
 }
 
 func (i *Item) SetPriority(pri int) {
