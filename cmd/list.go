@@ -13,6 +13,7 @@ import (
 
 	"github.com/phurba-sherpa/tri/todo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 var (
@@ -21,9 +22,10 @@ var (
 )
 
 func listTodo(cmd *cobra.Command, args []string) {
-	items, err := todo.ReadItems(dataFile)
+	fp := viper.GetString("datafile")
+	items, err := todo.ReadItems(fp)
 	if err != nil {
-		log.Fatalf(dataFile, "Error reading content", err)
+		log.Fatalf(fp, "Error reading content", err)
 	}
 
 	sort.Sort(todo.ByPri(items))

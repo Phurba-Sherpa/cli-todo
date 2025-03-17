@@ -12,11 +12,13 @@ import (
 
 	"github.com/phurba-sherpa/tri/todo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // doneCmd represents the done command
 func doneRun(cmd *cobra.Command, args []string) {
-	items, err := todo.ReadItems(dataFile)
+	fp := viper.GetString("datafile")
+	items, err := todo.ReadItems(fp)
 	i, err := strconv.Atoi(args[0])
 
 	if err != nil {
@@ -27,7 +29,7 @@ func doneRun(cmd *cobra.Command, args []string) {
 		items[i-1].Done = true
 		fmt.Printf("%q %v", items[i-1].Text, items[i-1].Done)
 		sort.Sort(todo.ByPri(items))
-		todo.SaveItem(dataFile, items)
+		todo.SaveItem(fp, items)
 	} else {
 		log.Println(i, "Doesn't match any item")
 	}

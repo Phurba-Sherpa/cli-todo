@@ -9,10 +9,12 @@ import (
 
 	"github.com/phurba-sherpa/tri/todo"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 func createTodo(cmd *cobra.Command, args []string) {
-	items, err := todo.ReadItems(dataFile)
+	fp := viper.GetString("datafile")
+	items, err := todo.ReadItems(fp)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -25,7 +27,7 @@ func createTodo(cmd *cobra.Command, args []string) {
 		items = append(items, item)
 	}
 
-	if err := todo.SaveItem(dataFile, items); err != nil {
+	if err := todo.SaveItem(fp, items); err != nil {
 		log.Fatal(err)
 	}
 }
